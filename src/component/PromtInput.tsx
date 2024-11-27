@@ -7,9 +7,6 @@ interface ChatMessage {
 
 interface Part {
   text?: string;
-  image?: {
-    url: string;
-  };
 }
 
 interface PromptInputProps {
@@ -82,14 +79,25 @@ const PromptInput: React.FC<PromptInputProps> = ({
       ]);
       setValue("");
     } catch (error) {
+      setChatHistory((prevHistory) => {
+        const newHistory = [...prevHistory];
+        newHistory[newHistory.length - 1] = {
+          role: "model",
+          parts: [{ text: "Error fetching response" }],
+        };
+        return newHistory;
+      });
       console.error("Error fetching response:", error);
     }
+    chatHistory.map((item, index) => {
+      console.log(item.parts[0].text, "from the prompt (key:", index, ")");
+    });
   };
 
   //---------------------------- --------------------
   useEffect(() => {
     onChatHistory?.(chatHistory);
-  }, [chatHistory, onChatHistory]);
+  }, [chatHistory]);
   return (
     <div
       className="relative h-full min-h-16 w-full flex items-center justify-evenly bg-[#ffffff] dark:bg-[#040824] shadow-all-around scroll-smooth focus:scroll-auto rounded-2xl"

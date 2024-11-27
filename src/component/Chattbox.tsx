@@ -5,9 +5,6 @@ interface ChatMessage {
 
 interface Part {
   text?: string;
-  image?: {
-    url: string;
-  };
 }
 
 interface ChattboxProps {

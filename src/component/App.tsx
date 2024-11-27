@@ -11,9 +11,6 @@ interface ChatMessage {
 
 interface Part {
   text?: string;
-  image?: {
-    url: string;
-  };
 }
 
 function App() {
@@ -22,12 +19,9 @@ function App() {
     setIsSidebarOpen(!isSidebarOpen);
   };
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
-  const handleChatHistory = (chatHistory: ChatMessage[]) => {
-    const newMessage = chatHistory[0];
-    if (newMessage !== undefined) {
-      setChatHistory((prevHistory) => [...prevHistory, newMessage]);
-    }
-  };
+  const handleChatHistory = (newChatHistory: ChatMessage[]) => {
+    setChatHistory((prevHistory) => [...prevHistory, ...newChatHistory]);
+};
 
   return (
     <div className=" w-full h-screen bg-white dark:bg-[#050615] flex items-center justify-center ">
