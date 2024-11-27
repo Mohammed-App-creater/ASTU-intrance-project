@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  @apply w-full h-screen;
+}
+
+.open {
+  transform: translateX(0) !important;
+}
+.close {
+  transform: translateX(-100%);
+}
+
+.inputPromt,
+body {
+  ::-webkit-scrollbar {
+    width: 5px;
+    padding-left: 90px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background-color: #0a1351;
+    border-radius: 5px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: transparent;
+  }
+}
