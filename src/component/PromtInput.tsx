@@ -5,33 +5,39 @@ interface PromptInputProps {
 }
 
 const PromptInput: React.FC<PromptInputProps> = ({ getResponse }) => {
-  const maxHeight: number = 200;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [textareaHeight, setTextareaHeight] = useState(0);
-  //----------------------------------
   const [value, setValue] = useState(" ");
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
+  const handleKeyDown = (event: {
+    shiftKey: boolean; key: string, preventDefault: () => void 
+}) => {
+    if (event.key === 'Enter' && event.shiftKey) {
+
+      setValue(value + '\n');
+      event.preventDefault(); 
+    } else if (event.key === 'Enter') {
+      console.log("Enter key pressed!");
+      sendPromtp();
+    }
+    
+  };
+
   useEffect(() => {
     const textarea = textareaRef.current;
-
     if (textarea) {
-      const initialHeight = textarea.scrollHeight;
-      setTextareaHeight(Math.min(initialHeight, maxHeight));
+      const resizeTextarea = () => {
+        textarea.style.height = "auto";
+        textarea.style.height = textarea.scrollHeight + "px";
+      };
 
-      textarea.addEventListener("input", () => {
-        const newHeight = Math.min(textarea.scrollHeight, maxHeight);
-        setTextareaHeight(newHeight);
-      });
+      textarea.addEventListener("input", resizeTextarea);
+
+      return () => {
+        textarea.removeEventListener("input", resizeTextarea);
+      };
     }
-
-    return () => {
-      if (textarea) {
-        textarea.removeEventListener("input", () => {});
-      }
-    };
-  }, [textareaRef, maxHeight]);
-
+  }, [textareaRef]);
   //---------------- ------------------
 
   const sendPromtp = () => {
@@ -43,27 +49,26 @@ const PromptInput: React.FC<PromptInputProps> = ({ getResponse }) => {
   };
 
   return (
-    <div
-      className="relative h-full min-h-16 w-full flex items-center justify-evenly bg-[#ffffff] dark:bg-[#040824] shadow-all-around scroll-smooth focus:scroll-auto rounded-2xl"
-      style={{ height: textareaHeight }}
-    >
+    <div className="relative h-full min-h-16 w-full flex items-end justify-evenly pb-1 bg-[#ffffff] dark:bg-[#040824] shadow-all-around  rounded-2xl">
       <textarea
         ref={textareaRef}
         value={value}
         onChange={(event) => setValue(event.target.value)}
+        onKeyDown={handleKeyDown}
         name="inputPromt"
         id="textFiled"
-        className="inputPromt text-[#b5b8c5] bg-transparent w-[90%] pl-6 pr-4 resize-none place-content-center scroll-smooth focus:scroll-auto focus:outline-none"
+        className="inputPromt text-[#b5b8c5] bg-transparent w-[90%] max-h-[200px] min-h-[54px]  pl-6 pr-4 resize-none place-content-center scroll-smooth focus:scroll-auto focus:outline-none"
         placeholder="I'm feeling chatty! Ask me anything."
-        style={{ height: textareaHeight }}
       />
       <button
         onClick={sendPromtp}
         disabled={isDisabled}
-        className=" w-11 h-11 hover:bg-[#09172c] active:bg-opacity-5 rounded-full flex justify-center items-center"
+        className=" w-11 h-11 hover:bg-[#09172c] active:bg-opacity-5 rounded-full flex justify-center items-center mb-1"
       >
         <svg
-          className={`${isDisabled? "dark:fill-[#606166]": "dark:fill-[#b5b8c5]"}`}
+          className={`${
+            isDisabled ? "dark:fill-[#606166]" : "dark:fill-[#b5b8c5]"
+          }`}
           xmlns="http://www.w3.org/2000/svg"
           height="24px"
           viewBox="0 -960 960 960"
