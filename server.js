@@ -20,9 +20,11 @@ app.post("/gemini", async (req, res) => {
       history: history,
     });
     const message = req.body.massage;
+    console.log(message);
     const result = await chat.sendMessage(message);
     const response = await result.response;
     const text = response.text();
+    console.log(text);
     res.send(text);
   } catch (error) {
     console.error(error);

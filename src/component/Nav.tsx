@@ -1,7 +1,7 @@
 import { MouseEventHandler } from "react";
 
 const Nav = (props: {
-  menuBtn: MouseEventHandler<HTMLDivElement> | undefined;
+  menuBtn?: MouseEventHandler<HTMLDivElement>;
 }) => {
   return (
     <nav className=" w-full h-16 absolute top-1 flex items-center  justify-between  pl-2 pr-6   bg-transparent ">
