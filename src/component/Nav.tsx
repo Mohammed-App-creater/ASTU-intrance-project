@@ -1,13 +1,13 @@
 import { MouseEventHandler } from "react";
 
 const Nav = (props: {
-  menuBtn?: MouseEventHandler<HTMLDivElement>;
+  menuBtn?: MouseEventHandler<HTMLDivElement>, isSidebarOpen?: boolean;
 }) => {
   return (
     <nav className=" w-full h-16 absolute top-1 flex items-center  justify-between  pl-2 pr-6   bg-transparent ">
-      <div className=" h-full flex items-center gap-12 z-10 ">
+      <div className=" h-full flex items-center gap-12 z-20 ">
         <div
-          className=" h-3/4 w-12 flex items-center justify-center rounded-full hover:bg-[#09172c] active:bg-opacity-5"
+          className=" h-3/4 w-12 flex items-center justify-center rounded-full hover:bg-[#09172c] active:bg-opacity-5 "
           onClick={props.menuBtn}
         >
           <svg
@@ -21,9 +21,9 @@ const Nav = (props: {
             <path d="M120-240v-80h720v80H120Zm0-200v-80h720v80H120Zm0-200v-80h720v80H120Z" />
           </svg>
         </div>
-        <a className="dark:text-[#b5b8c5] font-semibold text-xl">ASTUChat</a>
+        <a className={`dark:text-[#b5b8c5] font-semibold text-xl transition-all ease-in-out ${props.isSidebarOpen ? " lg:translate-x-60" : ""} `}>ASTUChat</a>
       </div>
-      <div className="flex gap-14 items-center">
+      <div className="flex gap-14 items-center ">
         <svg
           className=" dark:fill-[#b5b8c5]"
           xmlns="http://www.w3.org/2000/svg"

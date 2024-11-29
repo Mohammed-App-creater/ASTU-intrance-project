@@ -1,44 +1,65 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
 interface ChattboxProps {
   userMassage?: string;
-  aiRespons?: string;
+  aiResponse?: string;
+  isSidebarOpen: boolean;
 }
 
 function Chattbox(props: ChattboxProps) {
   const userMassage = props.userMassage;
-  const aiRespons = props.aiRespons;
+  const aiResponse = props.aiResponse;
   const [chatHistory, setChatHistory] = useState<string[]>([]);
-  
+  const prevUserMessageRef = useRef("");
 
   useEffect(() => {
-    if (userMassage) {
+    if (userMassage && userMassage !== prevUserMessageRef.current) {
       setChatHistory((prevHistory) => [...prevHistory, userMassage]);
+      prevUserMessageRef.current = userMassage;
+    } else if (aiResponse) {
+      setChatHistory((prevHistory) => [...prevHistory, aiResponse]);
     }
-    if (aiRespons) {
-      setChatHistory((prevHistory) => [...prevHistory, aiRespons]);
-    }
-  }, [userMassage, aiRespons]);
+  }, [userMassage, aiResponse]);
 
-  
-
-  console.log(userMassage, "chattbox");
   return (
-    <div className=" w-[80%] lg:w-[45%] h-[87%] ">
-      <div className=" w-full h-full bg-slate-400 px-4 pt-6 overflow-scroll">
+    <div
+      className={` w-full  flex justify-center h-[81%] mb-[3rem] overflow-y-auto transition-all ease-linear ${
+        props.isSidebarOpen ? " lg:translate-x-48" : ""
+      } `}
+    >
+      <div
+        className={`  w-[80%] lg:w-[45%] h-full  px-4  ${
+          chatHistory.length === 0
+            ? "pb-12 flex justify-center items-center"
+            : "pt-6"
+        }`}
+      >
+        {chatHistory.length === 0 ? (
+          <div className=" w-fit h-12  ">
+            <h1 className=" text-4xl font-semibold bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 text-transparent bg-clip-text">
+              {" "}
+              WellCome ASTUChat
+            </h1>
+          </div>
+        ) : null}
         {chatHistory.length > 0 &&
           chatHistory.map((item, index) => {
             return (
               <div
-                className=" USER w-[98%] h-auto bg-slate-800 flex items-start justify-between p-4 gap-6 dark:text-[#b5b8c5]"
+                className=" w-[98%] h-auto  flex items-start justify-start   p-4 gap-6 dark:text-[#fff] overflow-x-auto"
                 key={index}
               >
-                <div className=" flex-none w-9 h-9 rounded-full bg-slate-500"></div>
-                <p>{item}</p>
+                <div className=" flex-none w-8 h-8 rounded-full bg-slate-500"></div>
+                <pre className=" text-wrap leading-8 text-left">
+                  <code>{`${item} ${
+                    chatHistory.length - 1 === index
+                      ? ` \n \n \n \n \n  \n \n \n \n`
+                      : ""
+                  }`}</code>
+                </pre>
               </div>
             );
           })}
-          
       </div>
     </div>
   );

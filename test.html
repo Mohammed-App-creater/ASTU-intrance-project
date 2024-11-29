@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/default.min.css"
+    />
+    <link rel="stylesheet" href="./index.css" />
+  </head>
+  <body>
+    <pre>
+        <code>
+function identifyFormat(text) {
+    // Basic regular expressions for common formats
+    const htmlRegex = /<[^>]+>/;
+    const jsonRegex = /\{.*\}/;
+    const xmlRegex = /<\?xml.*\?>/;
+    const markdownRegex = /^#/;
+    const codeRegex = /`.*`/g;
+    
+    // Check for HTML
+    if (htmlRegex.test(text)) {
+        return "HTML";
+    }
+    
+    // Check for JSON
+    if (jsonRegex.test(text)) {
+        return "JSON";
+    }
+    
+    // Check for XML
+    if (xmlRegex.test(text)) {
+        return "XML";
+    }
+    
+    // Check for Markdown headings
+    if (markdownRegex.test(text)) {
+        return "Markdown Heading";
+    }
+    
+    // Check for code snippets
+    if (codeRegex.test(text)) {
+        return "Code Snippet";
+    }
+    
+    // Default to plain text
+    return "Plain Text";
+    }
+    
+    // Example usage:
+    const textList = [
+    "<p>This is HTML</p>",
+    '{"key": "value"}',
+    "<xml><root></root></xml>",
+    "# Heading",
+    "`console.log('Hello, world!');`",
+    "This is plain text",
+    ];
+    
+    for (const text of textList) {
+    console.log(`${text} is identified as: ${identifyFormat(text)} \n`);
+    }
+    
+    import hljs from 'highlight.js';
+    import javascript from 'highlight.js/lib/languages/javascript';
+    
+    const codeSnippet = '```javascript\nconsole.log("Hello, world!");\n```';
+    hljs.registerLanguage('javascript', javascript);
+    // Highlight the code snippet and get the HTML
+    const highlightedCode = hljs.highlight(
+        '<span>Hello World!</span>',
+        { language: 'xml' }
+    ).value
+        </code>
+    </pre>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/go.min.js"></script>
+    <script>
+      hljs.highlightAll();
+    </script>
+  </body>
+</html>

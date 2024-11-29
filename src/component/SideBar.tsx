@@ -5,14 +5,14 @@ type Props = {
 const SideBar: React.FC<Props> = (props) => {
   return (
     <section
-      className={`h-screen w-[85%]  absolute top-0   flex flex-col justify-end gap-3   bg-[#ffffff]   dark:bg-[#040824] rounded-r-2xl lg:rounded-none   ${
+      className={`h-screen w-[85%]   absolute top-0 left-0   flex flex-col justify-end gap-3   bg-[#ffffff]   dark:bg-[#040824] rounded-r-2xl lg:rounded-none z-10  ${
         props.isOpen
-          ? " translate-x-0 transition-all duration-300 ease-in-out lg:w-[18.5%] pb-32   "
-          : "-translate-x-full lg:translate-x-0 transition-all duration-300 ease-in-out lg:w-[4.6rem] pb-16"
+          ? " max-lg:translate-x-0   transition-all duration-300   pb-32 lg:w-[23.5%] xl:w-[18.5%]  "
+          : " max-lg:-translate-x-full  transition-all duration-300  lg:w-[4.6rem] pb-16"
       }`}
     >
-      <div className=" h-12 flex items-center gap-4 hover:bg-[#09172c] active:bg-opacity-5 rounded-xl pl-6">
-        <div className=" h-full flex items-center    rounded-full ">
+      <div className={` h-12 flex items-center gap-4 ${ props.isOpen? "hover:bg-[#09172c]  active:bg-opacity-5 rounded-xl pl-6 " : "pl-3"}`}>
+        <div className=" h-full w-12 flex items-center justify-center  rounded-full active:bg-opacity-5 hover:bg-[#09172c]  ">
           <svg
             className=" dark:fill-[#b5b8c5]"
             xmlns="http://www.w3.org/2000/svg"
@@ -33,8 +33,8 @@ const SideBar: React.FC<Props> = (props) => {
           New Chat
         </p>
       </div>
-      <div className=" h-12 flex items-center gap-4 hover:bg-[#09172c] active:bg-opacity-5 rounded-xl pl-6">
-        <div className=" h-full flex items-center    rounded-full ">
+      <div className={` h-12 flex items-center gap-4 ${ props.isOpen? "hover:bg-[#09172c]  active:bg-opacity-5 rounded-xl pl-6 " : "pl-3"}`}>
+        <div className=" h-full w-12 flex items-center justify-center  rounded-full active:bg-opacity-5 hover:bg-[#09172c]  ">
           <svg
             className=" dark:fill-[#b5b8c5]"
             xmlns="http://www.w3.org/2000/svg"
@@ -55,8 +55,8 @@ const SideBar: React.FC<Props> = (props) => {
           How to use
         </p>
       </div>
-      <div className=" h-12 flex items-center gap-4 hover:bg-[#09172c] active:bg-opacity-5 rounded-xl pl-6">
-        <div className=" h-full flex items-center    rounded-full ">
+    <div className={` h-12 flex items-center gap-4 ${ props.isOpen? "hover:bg-[#09172c]  active:bg-opacity-5 rounded-xl pl-6 " : "pl-3"} `}>
+        <div className=" h-full w-12 flex items-center justify-center  rounded-full active:bg-opacity-5 hover:bg-[#09172c]  ">
           <svg
             className=" dark:fill-[#b5b8c5]"
             xmlns="http://www.w3.org/2000/svg"
@@ -79,9 +79,9 @@ const SideBar: React.FC<Props> = (props) => {
         </p>
       </div>
       <div
-        className={`flex items-center h-12 gap-4 hover:bg-[#09172c] active:bg-opacity-5 rounded-xl pl-6 `}
+        className={`flex items-center h-12 gap-4 ${ props.isOpen? "hover:bg-[#09172c]  active:bg-opacity-5 rounded-xl pl-6 " : "pl-3"} `}
       >
-        <div className=" h-full flex items-center    rounded-full ">
+        <div className=" h-full w-12 flex items-center justify-center  rounded-full active:bg-opacity-5 hover:bg-[#09172c]  ">
           <svg
             className=" dark:fill-[#b5b8c5]"
             xmlns="http://www.w3.org/2000/svg"

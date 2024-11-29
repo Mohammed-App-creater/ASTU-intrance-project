@@ -20,16 +20,16 @@ app.post("/gemini", async (req, res) => {
       history: history,
     });
     const message = req.body.massage;
-    console.log(message);
     const result = await chat.sendMessage(message);
     const response = await result.response;
     const text = response.text();
-    console.log(text);
+    console.log(response.candidates[0].content);
+    
+    console.log("text mmmmmmmmmmmmmmmm",text);
     res.send(text);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: "Internal Server Error" + error });
-    console.log(error);
   }
 });
 

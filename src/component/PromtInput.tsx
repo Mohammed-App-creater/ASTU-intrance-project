@@ -2,25 +2,26 @@ import React, { useRef, useEffect, useState } from "react";
 
 interface PromptInputProps {
   getResponse: (value: string) => Promise<boolean>;
+  isSidebarOpen: boolean;
 }
 
-const PromptInput: React.FC<PromptInputProps> = ({ getResponse }) => {
+const PromptInput: React.FC<PromptInputProps> = ({ getResponse, isSidebarOpen }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-  const [value, setValue] = useState(" ");
+  const [value, setValue] = useState("");
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   const handleKeyDown = (event: {
-    shiftKey: boolean; key: string, preventDefault: () => void 
-}) => {
-    if (event.key === 'Enter' && event.shiftKey) {
-
-      setValue(value + '\n');
-      event.preventDefault(); 
-    } else if (event.key === 'Enter') {
-      console.log("Enter key pressed!");
+    shiftKey: boolean;
+    key: string;
+    preventDefault: () => void;
+  }) => {
+    if (event.key === "Enter" && event.shiftKey) {
+      setValue(value + "\n");
+      event.preventDefault();
+    } else if (event.key === "Enter") {
+      event.preventDefault();
       sendPromtp();
     }
-    
   };
 
   useEffect(() => {
@@ -49,7 +50,7 @@ const PromptInput: React.FC<PromptInputProps> = ({ getResponse }) => {
   };
 
   return (
-    <div className="relative h-full min-h-16 w-full flex items-end justify-evenly pb-1 bg-[#ffffff] dark:bg-[#040824] shadow-all-around  rounded-2xl">
+    <div className={`relative h-full min-h-16 w-full flex items-end justify-evenly pb-1 bg-[#ffffff] dark:bg-[#040824] shadow-all-around  rounded-2xl transition-all ease-linear ${isSidebarOpen ? " lg:translate-x-48" : ""}`}>
       <textarea
         ref={textareaRef}
         value={value}
