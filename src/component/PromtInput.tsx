@@ -5,7 +5,10 @@ interface PromptInputProps {
   isSidebarOpen: boolean;
 }
 
-const PromptInput: React.FC<PromptInputProps> = ({ getResponse, isSidebarOpen }) => {
+const PromptInput: React.FC<PromptInputProps> = ({
+  getResponse,
+  isSidebarOpen,
+}) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState("");
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -39,7 +42,6 @@ const PromptInput: React.FC<PromptInputProps> = ({ getResponse, isSidebarOpen })
       };
     }
   }, [textareaRef]);
-  //---------------- ------------------
 
   const sendPromtp = () => {
     getResponse(value).then((result) => {
@@ -47,10 +49,20 @@ const PromptInput: React.FC<PromptInputProps> = ({ getResponse, isSidebarOpen })
     });
     setValue("");
     setIsDisabled(true);
+    const textarea = textareaRef.current;
+    if (textarea) {
+      textarea.style.height = "54px";
+    }
   };
 
+  //---------------- ------------------
+
   return (
-    <div className={`relative h-full min-h-16 w-full flex items-end justify-evenly pb-1 bg-[#ffffff] dark:bg-[#040824] shadow-all-around  rounded-2xl transition-all ease-linear ${isSidebarOpen ? " lg:translate-x-48" : ""}`}>
+    <div
+      className={`relative h-full min-h-16 w-full flex items-end justify-evenly pb-1 bg-[#ffffff] dark:bg-[#040824] shadow-all-around  rounded-2xl transition-all ease-linear ${
+        isSidebarOpen ? " lg:translate-x-48" : ""
+      }`}
+    >
       <textarea
         ref={textareaRef}
         value={value}

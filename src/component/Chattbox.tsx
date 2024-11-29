@@ -1,4 +1,7 @@
 import { useState, useEffect, useRef } from "react";
+import Table from "./Table";
+// import SyntaxHighlighter from "react-syntax-highlighter";
+// import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 interface ChattboxProps {
   userMassage?: string;
@@ -6,11 +9,14 @@ interface ChattboxProps {
   isSidebarOpen: boolean;
 }
 
+
+
 function Chattbox(props: ChattboxProps) {
   const userMassage = props.userMassage;
   const aiResponse = props.aiResponse;
   const [chatHistory, setChatHistory] = useState<string[]>([]);
   const prevUserMessageRef = useRef("");
+  //const [copy, setCopy] = useState(false);
 
   useEffect(() => {
     if (userMassage && userMassage !== prevUserMessageRef.current) {
@@ -20,6 +26,29 @@ function Chattbox(props: ChattboxProps) {
       setChatHistory((prevHistory) => [...prevHistory, aiResponse]);
     }
   }, [userMassage, aiResponse]);
+
+  // const copied = () => {
+  //   setCopy(true);
+  //   //navigator.clipboard.writeText(copyString);
+  //   setTimeout(() => {
+  //     setCopy(false);
+  //   }, 1000);
+
+  // };
+
+  const tableHeading = ["Column 1", "Column 2", "Column 3"];
+
+  const tableBody = [
+    {
+      row: ["Row 1, Cell 1", "Row 1, Cell 2", "Row 1, Cell 3"],
+    },
+    {
+      row: ["Row 2, Cell 1", "Row 2, Cell 2", "Row 2, Cell 3"],
+    },
+    {
+      row: ["Row 3, Cell 1", "Row 3, Cell 2", "Row 3, Cell 3"],
+    },
+  ];
 
   return (
     <div
@@ -46,16 +75,12 @@ function Chattbox(props: ChattboxProps) {
           chatHistory.map((item, index) => {
             return (
               <div
-                className=" w-[98%] h-auto  flex items-start justify-start   p-4 gap-6 dark:text-[#fff] overflow-x-auto"
+                className=" w-[98%] h-auto  flex items-start justify-start   p-4 gap-6 dark:text-[#fff]  "
                 key={index}
               >
                 <div className=" flex-none w-8 h-8 rounded-full bg-slate-500"></div>
-                <pre className=" text-wrap leading-8 text-left">
-                  <code>{`${item} ${
-                    chatHistory.length - 1 === index
-                      ? ` \n \n \n \n \n  \n \n \n \n`
-                      : ""
-                  }`}</code>
+                <pre>
+                  <Table tableHeading={tableHeading} tableBody={tableBody} />
                 </pre>
               </div>
             );
