@@ -26,7 +26,7 @@ const CreateCodeBlock: React.FC<CodeBlockProps> = ({
     <div className=" w-full h-auto bg-[#292d33] rounded-xl overflow-x-hidden  ">
       <div className=" flex justify-between pr-12">
         <p className=" h-12 w-36 pt-3 pl-4 text-[#dfe1e8] font-semibold ">
-          JavaScript
+          {codeLanguage ? codeLanguage : ""}
         </p>
         {!copy ? (
           <button
@@ -62,13 +62,13 @@ const CreateCodeBlock: React.FC<CodeBlockProps> = ({
         )}
       </div>
       <SyntaxHighlighter
-        language={codeLanguage}
+        language={codeLanguage ? codeLanguage : "python"}
         style={atomOneDark}
         wrapLongLines={true}
         wrapLines={true}
         customStyle={{ width: "100%", textWrap: "wrap" }}
       >
-        {codeBlock}
+        {codeString}
       </SyntaxHighlighter>
     </div>
   );
