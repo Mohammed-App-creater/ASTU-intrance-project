@@ -3,11 +3,13 @@ import SyntaxHighlighter from "react-syntax-highlighter";
 import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
 interface CodeBlockProps {
+  key: number;
   codeBlock: string[];
   codeLanguage: string;
 }
 
 const CreateCodeBlock: React.FC<CodeBlockProps> = ({
+  key,
   codeBlock,
   codeLanguage,
 }) => {
@@ -23,7 +25,7 @@ const CreateCodeBlock: React.FC<CodeBlockProps> = ({
   };
 
   return (
-    <div className=" w-full h-auto bg-[#292d33] rounded-xl overflow-x-hidden  ">
+    <div key={key} className=" w-full h-auto bg-[#292d33] rounded-xl overflow-x-hidden my-4 ">
       <div className=" flex justify-between pr-12">
         <p className=" h-12 w-36 pt-3 pl-4 text-[#dfe1e8] font-semibold ">
           {codeLanguage ? codeLanguage : ""}
@@ -66,7 +68,7 @@ const CreateCodeBlock: React.FC<CodeBlockProps> = ({
         style={atomOneDark}
         wrapLongLines={true}
         wrapLines={true}
-        customStyle={{ width: "100%", textWrap: "wrap" }}
+        customStyle={{ width: "100%", minWidth: "100%", height: "auto", paddingLeft: "25px", paddingTop: 0, marginTop: 0}}
       >
         {codeString}
       </SyntaxHighlighter>

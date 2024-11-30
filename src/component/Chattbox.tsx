@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-//import Table from "./Table";
+import Formatter from "./Formater";
+
 
 
 interface ChattboxProps {
@@ -14,18 +15,6 @@ function Chattbox(props: ChattboxProps) {
   const [chatHistory, setChatHistory] = useState<string[]>([]);
   const prevUserMessageRef = useRef("");
 
-  
-
-    
-
- 
-
-
-
-
-
-
- 
 
   useEffect(() => {
     if (userMassage && userMassage !== prevUserMessageRef.current) {
@@ -45,7 +34,7 @@ function Chattbox(props: ChattboxProps) {
       } `}
     >
       <div
-        className={`  w-[80%] lg:w-[45%] h-full  px-4  ${
+        className={`  w-full lg:w-[45%] h-full  lg:px-4  ${
           chatHistory.length === 0
             ? "pb-12 flex justify-center items-center"
             : "pt-6"
@@ -63,11 +52,15 @@ function Chattbox(props: ChattboxProps) {
           chatHistory.map((item, index) => {
             return (
               <div
-                className=" w-[98%] h-auto  flex items-start justify-start   p-4 gap-6 dark:text-[#fff]  "
+                className=" w-[98%] h-auto  flex flex-col items-start justify-start   p-4 gap-6 dark:text-[#fff]  "
                 key={index}
               >
                 <div className=" flex-none w-8 h-8 rounded-full bg-slate-500"></div>
-                <pre>{item}</pre>
+                {index % 2 === 0 ? (
+                  <pre className=" w-full max-w-[90%] text-wrap text-[1.1rem] pl-1 ">{item}</pre>
+                ) : (
+                  <Formatter aiResponse={item} />
+                )}
               </div>
             );
           })}
