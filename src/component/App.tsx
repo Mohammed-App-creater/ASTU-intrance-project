@@ -41,8 +41,7 @@ function App() {
       };
       const response = await fetch("http://localhost:8000/gemini", option);
       const data = await response.text();
-      console.log(data);
-
+      
       setChatHistory((prevHistory) => [
         ...prevHistory,
         {

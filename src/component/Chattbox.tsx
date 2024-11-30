@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import Table from "./Table";
+//import Table from "./Table";
 // import SyntaxHighlighter from "react-syntax-highlighter";
 // import { atomOneDark } from "react-syntax-highlighter/dist/esm/styles/hljs";
 
@@ -9,14 +9,118 @@ interface ChattboxProps {
   isSidebarOpen: boolean;
 }
 
-
-
 function Chattbox(props: ChattboxProps) {
   const userMassage = props.userMassage;
   const aiResponse = props.aiResponse;
   const [chatHistory, setChatHistory] = useState<string[]>([]);
   const prevUserMessageRef = useRef("");
   //const [copy, setCopy] = useState(false);
+  
+
+  const codeBlock: string[] = [];
+  const preText: string[] = [];
+  let table: string = "";
+  const plaintext: string[] = [];
+
+
+
+
+  
+
+
+  const tableModifrer = (table: string) => {
+    const headerRow: string[] = [];
+    const bodyRows: string[][] = [];
+
+    // Split the table string into rows
+    const rows = table.split("\n").filter((row) => row.trim() !== "");
+
+    // Process each row
+    rows.forEach((row, index) => {
+      const cells = row
+        .trim()
+        .split("|")
+        .filter((cell) => cell.trim() !== "");
+
+      if (index === 0) {
+        // First row is the header row
+        headerRow.push(...cells);
+      } else {
+        // Subsequent rows are body rows
+        bodyRows.push(cells);
+      }
+    });
+
+    console.log("Header Row:", headerRow);
+    console.log("Body Rows:", bodyRows);
+  };
+
+
+  if (aiResponse) {
+    const AILine = aiResponse.split("\n");
+    let checker: boolean = false;
+    
+
+    
+
+    // Excretions
+    const Code = new RegExp(/```(\w+)/);
+    const codeorPreText = new RegExp(/```/);
+    const Table = new RegExp(/^\|/);
+
+    for (let i = 0; i < AILine.length; i++) {
+
+      if(checker){
+        console.log("in checker");
+        console.log(AILine[i]);
+        
+        if (!AILine[i].match(table) || AILine.length - 1 === i ){
+            checker = false;
+            tableModifrer(table);
+            table = ""
+            console.log("close cheker");
+        } 
+      }
+
+
+      if (AILine[i].match(Code)) {
+        const language: string = AILine[i].substring(3);
+        console.log(language);
+
+        i++;
+        while (!AILine[i].match(/```/)) {
+          codeBlock.push(AILine[i]);
+          i++;
+        }
+        //code to add the all the next line to the code block until the next ```
+        console.log(codeBlock);
+      } else if (AILine[i].match(codeorPreText)) {
+        const codeExp = new RegExp(
+          /^(#!|\/\*|\/\/|#include|<|>|public|private|protected|class|interface|enum|import|package|static|final|function| const|let|var|if|else|for|while|do|switch|case|default|def|with|try|except|finally|using namespace|int main|void main|struct|union|enum)/
+        );
+
+        if (AILine[i].match(codeExp)) {
+          while (!AILine[i].match(/```/)) {
+            codeBlock.push(AILine[i]);
+            i++;
+          }
+        } else {
+          while (!AILine[i].match(/```/)) {
+            preText.push(AILine[i]);
+            i++;
+          }
+        }
+      } else if (AILine[i].match(Table)) {
+        table += AILine[i] + "\n";
+        checker = true;
+        console.log("in table");
+        
+      } else {
+          plaintext.push(AILine[i]);
+      }
+    }
+    
+  }
 
   useEffect(() => {
     if (userMassage && userMassage !== prevUserMessageRef.current) {
@@ -35,20 +139,6 @@ function Chattbox(props: ChattboxProps) {
   //   }, 1000);
 
   // };
-
-  const tableHeading = ["Column 1", "Column 2", "Column 3"];
-
-  const tableBody = [
-    {
-      row: ["Row 1, Cell 1", "Row 1, Cell 2", "Row 1, Cell 3"],
-    },
-    {
-      row: ["Row 2, Cell 1", "Row 2, Cell 2", "Row 2, Cell 3"],
-    },
-    {
-      row: ["Row 3, Cell 1", "Row 3, Cell 2", "Row 3, Cell 3"],
-    },
-  ];
 
   return (
     <div
@@ -79,9 +169,7 @@ function Chattbox(props: ChattboxProps) {
                 key={index}
               >
                 <div className=" flex-none w-8 h-8 rounded-full bg-slate-500"></div>
-                <pre>
-                  <Table tableHeading={tableHeading} tableBody={tableBody} />
-                </pre>
+                <pre>{item}</pre>
               </div>
             );
           })}

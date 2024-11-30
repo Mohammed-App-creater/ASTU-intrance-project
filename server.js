@@ -5,6 +5,7 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 const PORT = 8000;
 const app = express();
+app.use(express.static("public"));
 
 app.use(cors());
 app.use(json());
@@ -24,8 +25,6 @@ app.post("/gemini", async (req, res) => {
     const response = await result.response;
     const text = response.text();
     console.log(response.candidates[0].content);
-    
-    console.log("text mmmmmmmmmmmmmmmm",text);
     res.send(text);
   } catch (error) {
     console.error(error);
