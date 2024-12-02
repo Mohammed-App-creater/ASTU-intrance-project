@@ -3,14 +3,14 @@ import React from "react";
 
 
 interface TableProps {
-  key: number;
+
   tableBody: string[][];
 }
 
-const Tables: React.FC<TableProps> = ({ key, tableBody, }) => {
+const Tables: React.FC<TableProps> = ({ tableBody, }) => {
   
   return (
-    <div key={key} className=" h-auto w-[450px]   rounded-2xl overflow-auto">
+    <div  className=" h-auto w-[450px]   rounded-2xl overflow-auto">
       <div className="container h-auto w-auto bg-[#fff] dark:bg-[#15182e]">
       <table className="table table-striped w-full">
         <thead>

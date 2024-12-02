@@ -5,10 +5,7 @@ interface PromptInputProps {
   isSidebarOpen: boolean;
 }
 
-const PromptInput: React.FC<PromptInputProps> = ({
-  getResponse,
-  isSidebarOpen,
-}) => {
+const PromptInput: React.FC<PromptInputProps> = ({ getResponse, isSidebarOpen, }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState("");
   const [isDisabled, setIsDisabled] = useState<boolean>(false);
@@ -45,7 +42,7 @@ const PromptInput: React.FC<PromptInputProps> = ({
 
   const sendPromtp = () => {
     getResponse(value).then((result) => {
-      setIsDisabled(result);
+      setIsDisabled(!result);
     });
     setValue("");
     setIsDisabled(true);
@@ -54,7 +51,7 @@ const PromptInput: React.FC<PromptInputProps> = ({
       textarea.style.height = "54px";
     }
   };
-
+  
   //---------------- ------------------
 
   return (

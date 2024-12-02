@@ -15,29 +15,26 @@ interface FormattedTextProps {
 }
 
 const FormattedText: React.FC<FormattedTextProps> = ({ formattedText }) => {
-  const hd = formattedText[0] || [];
-  console.log(formattedText);
-  console.log(hd);
-
+  
   return (
-    <div className={""}>
+    <div>
       {formattedText.map((item, index) => {
         const { type, text } = item;
 
         switch (type) {
           case "code":
             return (
+              <div key={index}>
               <CreateCodeBlock
-                key={index}
                 codeLanguage={item.codeLanguage || ""}
-                codeBlock={item.text.slice(1)}
+                codeBlock={item.text}
               />
+              </div>
             );
           case "pre":
-            return <PreFormattedText key={index} text={text} />;
+            return <div key={index}><PreFormattedText text={text} /></div>;
           case "table":
-            console.log(hd);
-            return <Tables key={index} tableBody={item.tableBody || []} />;
+            return <div key={index}><Tables tableBody={item.tableBody || []} /></div>;
           default:
             return (
               <p

@@ -1,4 +1,5 @@
 import FormattedTexts from "./FormatedText";
+import formatText from "./formatText";
 
 interface FormattedText {
   type: string;
@@ -34,13 +35,12 @@ const Formatter: React.FC<FormattedProps> = ({ aiResponse }) => {
         .filter((cell) => cell.trim() !== "");
 
       if (index === 1) {
-        return
+        return;
       } else {
         bodyRows.push(cells);
       }
     });
 
-    
     const FormateText = {
       type: "table",
       text: [],
@@ -57,12 +57,12 @@ const Formatter: React.FC<FormattedProps> = ({ aiResponse }) => {
     };
     FormateTextArray.push(FormateText);
   };
-
+  
   const preModifier = (preText: string[]) => {
     const FormateText = {
       type: "pre",
       text: preText,
-    }; 
+    };
     FormateTextArray.push(FormateText);
   };
 
@@ -80,27 +80,28 @@ const Formatter: React.FC<FormattedProps> = ({ aiResponse }) => {
     let checker: boolean = false;
 
     // Excretions
-    const Code = new RegExp(/```(\w+)/);
-    const codeOrPreText = new RegExp(/```/);
-    const Table = new RegExp(/^\|/);
+    const codeBlockRegex = /^```(\w+)/;
+    const codeOrPreText = /```/;
+    const Table = /^\|/;
 
     for (let i = 0; i < AILine.length; i++) {
       if (checker) {
-        if (!AILine[i].match(table) || AILine.length - 1 === i) {
+        if (!Table.test(AILine[i]) || AILine.length - 1 === i) {
           checker = false;
           tableModifier(table);
         }
       }
 
-      if (AILine[i].match(Code)) {
+      if (AILine[i].match(codeBlockRegex)) {
         codeLanguage = AILine[i].substring(3);
 
         i++;
         codeBlock = [];
-        while (!AILine[i].match(/```/)) {
+        while (!/```/.test(AILine[i]))  {
           codeBlock.push(AILine[i]);
           i++;
         }
+        
         codeModifier(codeBlock, codeLanguage);
       } else if (AILine[i].match(codeOrPreText)) {
         const codeExp = new RegExp(
@@ -112,100 +113,24 @@ const Formatter: React.FC<FormattedProps> = ({ aiResponse }) => {
           codeLanguage = "";
 
           codeBlock = [];
-          while (!AILine[i].match(/```/)) {
+          while (!/```/.test(AILine[i]))  {
             codeBlock.push(AILine[i]);
             i++;
           }
           codeModifier(codeBlock, codeLanguage);
         } else {
           preText = [];
-          while (!AILine[i].match(/```/)) {
+          while (!/```/.test(AILine[i])) {
             preText.push(AILine[i]);
             i++;
           }
-          preModifier(plaintext);
+          preModifier(preText);
         }
       } else if (AILine[i].match(Table)) {
         table += AILine[i] + "\n";
         checker = true;
       } else {
-        let x: string = "";
-
-        if (x.startsWith("**")) {
-          x = x.replace("**", "");
-          x = `<strong>${x}</strong>`;
-        } else if (
-          AILine[i].startsWith("*") &&
-          AILine[i][1] !== "*" &&
-          AILine[i][1] !== "~"
-        ) {
-          x = AILine[i].slice(1).trim();
-
-          // Use a single regular expression to handle all formatting
-          x = x.replace(
-            /\*\*(.*?)\*\*|\*\*\*(.*?)\*\*\*|\*(.*?)\*|~~(.*?)~~/g,
-            (match, strongItalic, strong, italic, strikethrough) => {
-              if (strongItalic) {
-                return `<b>${strongItalic}</b>`; // Bold only, no italics
-              } else if (strong) {
-                return `<b>${strong}</b>`;
-              } else if (italic) {
-                return `<i>${italic}</i>`;
-              } else if (strikethrough) {
-                return `<s>${strikethrough}</s>`;
-              }
-              return match; // If no match, return the original text
-            }
-          );
-
-          x = `<li>${x}</li>`;
-        } else if (x.startsWith("***")) {
-          x = x.replace("***", "");
-          x = `<strong><i>${x}</i></strong>`;
-        } else if (x.startsWith("*")) {
-          x = x.replace("*", "");
-          x = `<i>${x}</i>`;
-        } else if (x.startsWith("~~")) {
-          x = x.replace("~~", "");
-          x = `<s>${x}</s>`;
-        } else if (x.startsWith(">")) {
-          x = x.replace(">", "");
-          x = `<blockquote>${x}</blockquote>`;
-        } else if (x.startsWith("[")) {
-          x = x.replace("[", "");
-          x = x.replace("]", "");
-          x = x.replace("(", "");
-          x = x.replace(")", "");
-          x = `<a href="${x}">${x}</a>`;
-        } else if (x.startsWith("![")) {
-          x = x.replace("![", "");
-          x = x.replace("]", "");
-          x = x.replace("(", "");
-          x = x.replace(")", "");
-          x = `<div className="max-w-[200px] max-h-[300px] relative">
-                  <a href="${x}">
-                      <img
-                         src="${x}"
-                         alt="${x}"
-                         className="object-cover w-full h-full"
-                       />
-                  </a>
-              </div>`;
-        }else if (x.includes("`")) {
-          x = x.replace("`", "");
-          x = `<code>${x}</code>`;
-          
-        } else {
-          x = AILine[i];  
-        }
-       
-        console.log(x);
-
-        if(x == ""){
-          continue;
-        }
-      
-        
+        const x: string = formatText(AILine[i]);
         plaintext.push(x);
         plaintextModifier(plaintext);
         plaintext = [];

@@ -26,7 +26,7 @@ function App() {
     setUserMassage(value);
 
     if (value.trim() === "") {
-      return false;
+      return true;
     }
     try {
       const option = {
@@ -64,7 +64,7 @@ function App() {
       });
       console.error("Error fetching response:", error);
     }
-    return false;
+    return true;
   };
 
   useEffect(() => {
@@ -73,7 +73,6 @@ function App() {
       setAiRespons(lastMessage);
     }
   }, [chatHistory]);
-
   return (
     <div className=" rel w-full h-screen bg-white dark:bg-[#050615] flex items-center justify-center ">
       <Nav menuBtn={toggleSidebar} isSidebarOpen={isSidebarOpen} />
