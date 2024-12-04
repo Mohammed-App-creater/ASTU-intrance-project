@@ -120,9 +120,9 @@ const Form = (props: {
                   }
             }}
             type="submit"
-            className=" w-full h-14 bg-[#10a37f] text-white rounded-md"
+            className=" w-full h-14 bg-[#10a37f] text-white rounded-md hover:bg-[#10a37ebd] active:bg-[#10a37ebd] active:scale-95"
           >
-            Sing Up
+            { signup? "LogIn" : "Sing Up"}
           </button>
           
           <div className=" w-full h-14 flex justify-center items-center ">

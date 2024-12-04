@@ -1,8 +1,9 @@
+import { useNavigate } from "react-router-dom";
 import Form from "./Form";
 import axios from "axios";
 
 const SignUp = () => {
-
+  const Navigate = useNavigate();
   const handleSignUp = ( email: string, password: string,  Name?: string) => {
     
       axios.post("http://localhost:8000/signUp", {
@@ -10,11 +11,12 @@ const SignUp = () => {
       email: email,
       password: password,
     }).then((response) => {
-      console.log(response);
+      Navigate("/logIn");
+      console.log(response, " here");
     }).catch((error) => {
-      console.log(error);
+      console.log(error, " here");
     });
-  
+   
   return true;
 };
 
